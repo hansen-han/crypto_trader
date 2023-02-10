@@ -25,7 +25,8 @@ def live_trader(
         buy_threshold,
         sell_threshold,
         stop_loss,
-        buy_size
+        buy_size,
+        scraper_frequency
 ):
     '''
     Parameters:
@@ -35,6 +36,7 @@ def live_trader(
         sell_threshold: at what point to sell and take profit (if the take profit is 3%, then use 1.03)
         stop_loss: at what point to sell and stop losses (if the stop loss is 10%, use 0.9)
         buy_size: how much available capital to use per trade (between 0 and 1)
+        scraper_frequency: how often the scraper collects data (in minutes)
     '''
     logging.debug("Initializing live trading algorithm")
 
@@ -97,7 +99,7 @@ def live_trader(
             #Check if there is sufficient data to generate trade signals
             timethreshold = datetime.now() - timediff
             #check if there is enough data to calculate the full moving average (6000 minutes, 600 total given that data is collected every 10 minutes by the scraper)
-            if len([x for x in c.execute("SELECT * FROM price_data")]) < (600 - 1):
+            if len([x for x in c.execute("SELECT * FROM price_data")]) < (rolling_window/scraper_frequency - 1):
                 logging.debug("Insufficient Data: Still Collecting")
                 print("Insufficient Data: Still Collecting")
             else:
@@ -422,5 +424,6 @@ if __name__ == "__main__":
         buy_threshold = sys.argv[3],
         sell_threshold = sys.argv[4],
         stop_loss = sys.argv[5],
-        buy_size = sys.argv[6]
+        buy_size = sys.argv[6],
+        scraper_frequency = sys.argv[7]
     )
