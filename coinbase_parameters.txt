@@ -2,7 +2,7 @@
 scraper_script = run
 scrape = run
 
-[Trader Section]
+[Mean Reversion Trader Section]
 total_invested = 10000
 trader_script = run
 trade = run

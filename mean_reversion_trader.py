@@ -26,7 +26,8 @@ def live_trader(
         sell_threshold,
         stop_loss,
         buy_size,
-        scraper_frequency
+        scraper_frequency,
+        coin = "BTC"
 ):
     '''
     Parameters:
@@ -37,6 +38,7 @@ def live_trader(
         stop_loss: at what point to sell and stop losses (if the stop loss is 10%, use 0.9)
         buy_size: how much available capital to use per trade (between 0 and 1)
         scraper_frequency: how often the scraper collects data (in minutes)
+        coin: the coin to be traded (default = "BTC")
     '''
     logging.debug("Initializing live trading algorithm")
 
@@ -90,9 +92,9 @@ def live_trader(
         #Get Master Parameters
         config = configparser.ConfigParser()
         config.read_file(open("coinbase_parameters.txt"))
-        starting_capital = config.get('Trader Section', 'total_invested') #corrects relevant variables based on new funding
-        trade_status = config.get('Trader Section', 'trade') #controls whether to trade this cycle
-        script_status = config.get('Trader Section', 'trader_script') #controls whether to shut the script down
+        starting_capital = config.get('Mean Reversion Trader Section', 'total_invested') #corrects relevant variables based on new funding
+        trade_status = config.get('Mean Reversion Trader Section', 'trade') #controls whether to trade this cycle
+        script_status = config.get('Mean Reversion Trader Section', 'trader_script') #controls whether to shut the script down
 
         if trade_status == "run":
 
