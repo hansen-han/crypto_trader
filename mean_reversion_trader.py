@@ -126,13 +126,13 @@ def live_trader(
                 #get breakdown of relevant balances for trading
                 try:
                     exchange_balance = coinbasepro.fetch_balance()
-                    available_position_size = exchange_balance['free']['BTC']
-                    used_position_size = exchange_balance['used']['BTC']
-                    total_position_size = exchange_balance['total']['BTC']
+                    available_position_size = exchange_balance['free'][coin]
+                    used_position_size = exchange_balance['used'][coin]
+                    total_position_size = exchange_balance['total'][coin]
 
-                    available_fiat = exchange_balance['free']['USD']
-                    used_fiat = exchange_balance['used']['USD']
-                    total_fiat = exchange_balance['total']['USD']
+                    available_fiat = exchange_balance['free']["USD"]
+                    used_fiat = exchange_balance['used']["USD"]
+                    total_fiat = exchange_balance['total']["USD"]
 
                 except ccxt.NetworkError as e:
                     print( 'fetch_balance failed due to a network error:', str(e))
@@ -176,7 +176,7 @@ def live_trader(
                     elif order_wait_time >= 30:
                         #cancel the orders
                         try:
-                            coinbasepro.cancel_order(last_order_id, "BTC/USD")
+                            coinbasepro.cancel_order(last_order_id, "{coin}/USD".format(coin = coin))
                             order_pending = False
                             print("Cancelled last order after 30 minutes")
                             logging.info("Cancelled last order after 30 minutes")
@@ -196,7 +196,7 @@ def live_trader(
 
                     #--- Generate Data for Decision Making ---
                     try: 
-                        ticker_data = coinbasepro.fetch_ticker("BTC/USD")
+                        ticker_data = coinbasepro.fetch_ticker("{coin}/USD".format(coin = coin))
                         logging.info("Downloaded ticker data from Coinbase Pro")
                         collected_data = True
 
@@ -206,7 +206,7 @@ def live_trader(
                         try:
                             logging.info("Retrying...")
                             print("Retrying...")
-                            ticker_data = coinbasepro.fetch_ticker("BTC/USD")
+                            ticker_data = coinbasepro.fetch_ticker("{coin}/USD".format(coin = coin))
                             logging.info("Downloaded ticker data from Coinbase Pro")
                             collected_data = True
                         except: 
@@ -214,7 +214,7 @@ def live_trader(
                             try:
                                 logging.info("Retrying...")
                                 print("Retrying...")
-                                ticker_data = coinbasepro.fetch_ticker("BTC/USD")
+                                ticker_data = coinbasepro.fetch_ticker("{coin}/USD".format(coin = coin))
                                 logging.info("Downloaded ticker data from Coinbase Pro")
                                 collected_data = True
                             except:
@@ -226,7 +226,7 @@ def live_trader(
                         try:
                             logging.info("Retrying...")
                             print("Retrying...")
-                            ticker_data = coinbasepro.fetch_ticker("BTC/USD")
+                            ticker_data = coinbasepro.fetch_ticker("{coin}/USD".format(coin = coin))
                             logging.info("Downloaded ticker data from Coinbase Pro")
                             collected_data = True
                         except: 
@@ -234,7 +234,7 @@ def live_trader(
                             try:
                                 logging.info("Retrying...")
                                 print("Retrying...")
-                                ticker_data = coinbasepro.fetch_ticker("BTC/USD")
+                                ticker_data = coinbasepro.fetch_ticker("{coin}/USD".format(coin = coin))
                                 logging.info("Downloaded ticker data from Coinbase Pro")
                                 collected_data = True
                             except:
@@ -253,11 +253,11 @@ def live_trader(
                                 
                                 #place limit buy at the best_ask price
                                 try:
-                                    print("Placing Limit Buy Order:", buy_volume, "BTC @ $", best_ask)
-                                    r = coinbasepro.create_limit_buy_order("BTC/USD", round(buy_volume*(1-0.005), 8), best_ask)
+                                    print("Placing Limit Buy Order:", buy_volume, coin, "@ $", best_ask)
+                                    r = coinbasepro.create_limit_buy_order("{coin}/USD".format(coin = coin), round(buy_volume*(1-0.005), 8), best_ask)
                                     last_order_id = r['id']
-                                    print("Placed Limit Buy Order:", round(buy_volume*(1-0.005), 8), "BTC @ $", best_ask)
-                                    logging.info("Placed Limit Buy Order: " + str(round(buy_volume*(1-0.005), 8)) + "BTC @ $" +  str(best_ask))
+                                    print("Placed Limit Buy Order:", round(buy_volume*(1-0.005), 8), coin, "@ $", best_ask)
+                                    logging.info("Placed Limit Buy Order: " + str(round(buy_volume*(1-0.005), 8)) + coin + "@ $" +  str(best_ask))
                                     purchase_price = best_ask 
                                     target_sell = purchase_price*sell_threshold
                                     order_pending = True
@@ -278,11 +278,11 @@ def live_trader(
                             #Collect Profit
                             if target_sell <= best_bid: 
                                 try:
-                                    print("Placing Limit Sell Order (WIN):", available_position_size, "BTC @ $", best_bid)
-                                    r = coinbasepro.create_limit_sell_order("BTC/USD", round(available_position_size*(1-0.005), 8), best_bid)
+                                    print("Placing Limit Sell Order (WIN):", available_position_size, coin, "@ $", best_bid)
+                                    r = coinbasepro.create_limit_sell_order("{coin}/USD".format(coin = coin), round(available_position_size*(1-0.005), 8), best_bid)
                                     last_order_id = r['id']
-                                    print("Placed Limit Sell Order (WIN):", round(available_position_size*(1-0.005), 8), "BTC @ $", best_bid)
-                                    logging.info("Placed Limit Sell Order (WIN): " + str(round(available_position_size*(1-0.005), 8)) + "BTC @ $" + str(best_bid))
+                                    print("Placed Limit Sell Order (WIN):", round(available_position_size*(1-0.005), 8), coin, "@ $", best_bid)
+                                    logging.info("Placed Limit Sell Order (WIN): " + str(round(available_position_size*(1-0.005), 8)) +  coin + " @ $" + str(best_bid))
                                     order_pending = True
                                     order_pending_type = "WIN"
                                 except ccxt.NetworkError as e:
@@ -298,11 +298,11 @@ def live_trader(
                             #Stop Loss
                             elif purchase_price*stop_loss >= best_bid:
                                 try:
-                                    print("Placing Limit Sell Order (Loss):", available_position_size, "BTC @ $", best_bid)
-                                    r = coinbasepro.create_limit_sell_order("BTC/USD", round(available_position_size*(1-0.005), 8), best_bid)
+                                    print("Placing Limit Sell Order (Loss):", available_position_size, coin, "@ $", best_bid)
+                                    r = coinbasepro.create_limit_sell_order("{coin}/USD".format(coin = coin), round(available_position_size*(1-0.005), 8), best_bid)
                                     last_order_id = r['id']
-                                    print("Placed Limit Sell Order (Loss):", round(available_position_size*(1-0.005), 8), "BTC @ $", best_bid)
-                                    logging.info("Placed Limit Sell Order (Loss): " +  str(round(available_position_size*(1-0.002), 8)) + "BTC @ $" + str(best_bid))
+                                    print("Placed Limit Sell Order (Loss):", round(available_position_size*(1-0.005), 8), coin, "@ $", best_bid)
+                                    logging.info("Placed Limit Sell Order (Loss): " +  str(round(available_position_size*(1-0.002), 8)) + coin + "@ $" + str(best_bid))
                                     order_pending = True
                                     order_pending_type = "LOSS"
                                 except ccxt.NetworkError as e:
@@ -322,9 +322,9 @@ def live_trader(
                         #Fetch another update of the account balance for summary (this also checks if the orders have been filled)
                         try:
                             exchange_balance = coinbasepro.fetch_balance()
-                            available_position_size = exchange_balance['free']['BTC']
-                            used_position_size = exchange_balance['used']['BTC']
-                            total_position_size = exchange_balance['total']['BTC']
+                            available_position_size = exchange_balance['free'][coin]
+                            used_position_size = exchange_balance['used'][coin]
+                            total_position_size = exchange_balance['total'][coin]
 
                             available_fiat = exchange_balance['free']['USD']
                             used_fiat = exchange_balance['used']['USD']
@@ -382,7 +382,7 @@ def live_trader(
                 print("Fiat: $", total_fiat)
                 logging.info(("Fiat: $" + str(total_fiat)))
                 print("Position:", total_position_size)
-                logging.info(("Position: " + str(total_position_size) + "BTC"))
+                logging.info(("Position: " + str(total_position_size) + coin))
                 try:
                     print("Entry Price:", purchase_price)
                     logging.info(("Entry Price: $" + str(purchase_price)))
