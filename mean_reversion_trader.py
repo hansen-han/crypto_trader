@@ -109,7 +109,7 @@ def live_trader(
                 intervaldata = [list(x) for x in c.execute("SELECT * FROM price_data") if datetime.strptime(list(x)[0], format) >= timethreshold ]
                 
                 #quality check - make sure that there is at least 65% of the points necessary to calculate the average (n=390)
-                if len(intervaldata) > 390:
+                if len(intervaldata) > rolling_window/scraper_frequency*0.65:
                     try:
                         interval_average = sum([x[3] for x in intervaldata])/len(intervaldata)
                         print("Moving Average:", interval_average)
