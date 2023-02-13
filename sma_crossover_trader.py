@@ -7,6 +7,7 @@ import ccxt
 import math
 import sys
 import configparser
+import ast
 
 
 #set up logging
@@ -24,7 +25,6 @@ def live_trader(
         rolling_window_1,
         rolling_window_2,
         buy_size,
-        scraper_frequency,
         coin = "BTC"
 ):
     '''
@@ -33,7 +33,6 @@ def live_trader(
         rolling_window_1: how long the long moving average should be (in minutes)
         rolling_window_2: how long the short moving average should be (in minutes)
         buy_size: how much available capital to use per trade (between 0 and 1)
-        scraper_frequency: how often the scraper collects data (in minutes)
         coin: the coin to be traded (default = "BTC")
     '''
     logging.debug("Initializing live trading algorithm")
@@ -93,6 +92,7 @@ def live_trader(
         starting_capital = config.get('SMA Crossover Trader Section', 'total_invested') #corrects relevant variables based on new funding
         trade_status = config.get('SMA Crossover Trader Section', 'trade') #controls whether to trade this cycle
         script_status = config.get('SMA Crossover Trader Section', 'trader_script') #controls whether to shut the script down
+        scraper_frequency = ast.literal_eval(config.get("Scraper Section", "scraper_frequency")) #how often the scraper collects data (in minutes)
 
         if trade_status == "run":
 
@@ -415,10 +415,8 @@ def live_trader(
 if __name__ == "__main__":
     live_trader(
         intervals = sys.argv[1],
-        rolling_window = sys.argv[2],
-        buy_threshold = sys.argv[3],
-        sell_threshold = sys.argv[4],
-        stop_loss = sys.argv[5],
-        buy_size = sys.argv[6],
-        scraper_frequency = sys.argv[7]
+        rolling_window_1 = sys.argv[2],
+        rolling_window_1 = sys.argv[3],
+        buy_size = sys.argv[4],
+        coin = sys.argv[5]
     )

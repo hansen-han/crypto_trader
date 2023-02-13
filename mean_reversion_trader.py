@@ -7,6 +7,7 @@ import ccxt
 import math
 import sys
 import configparser
+import ast
 
 
 #set up logging
@@ -20,24 +21,20 @@ logging.basicConfig(
 )
 
 def live_trader(
-        intervals,
         rolling_window,
         buy_threshold,
         sell_threshold,
         stop_loss,
         buy_size,
-        scraper_frequency,
         coin = "BTC"
 ):
     '''
     Parameters:
-        intervals: how often to check for new data (in seconds)
         rolling_window: how long the moving average should be (in minutes)
         buy_threshold: at what point when the price goes below the moving average to buy (if the buy threshold is 3%, use 0.97)
         sell_threshold: at what point to sell and take profit (if the take profit is 3%, then use 1.03)
         stop_loss: at what point to sell and stop losses (if the stop loss is 10%, use 0.9)
         buy_size: how much available capital to use per trade (between 0 and 1)
-        scraper_frequency: how often the scraper collects data (in minutes)
         coin: the coin to be traded (default = "BTC")
     '''
     logging.debug("Initializing live trading algorithm")
@@ -95,6 +92,7 @@ def live_trader(
         starting_capital = config.get('Mean Reversion Trader Section', 'total_invested') #corrects relevant variables based on new funding
         trade_status = config.get('Mean Reversion Trader Section', 'trade') #controls whether to trade this cycle
         script_status = config.get('Mean Reversion Trader Section', 'trader_script') #controls whether to shut the script down
+        intervals = scraper_frequency = ast.literal_eval(config.get("Scraper Section", "scraper_frequency")) #how often the scraper collects data (in minutes)
 
         if trade_status == "run":
 
@@ -421,11 +419,10 @@ def live_trader(
 
 if __name__ == "__main__":
     live_trader(
-        intervals = sys.argv[1],
-        rolling_window = sys.argv[2],
-        buy_threshold = sys.argv[3],
-        sell_threshold = sys.argv[4],
-        stop_loss = sys.argv[5],
-        buy_size = sys.argv[6],
-        scraper_frequency = sys.argv[7]
+        rolling_window = sys.argv[1],
+        buy_threshold = sys.argv[2],
+        sell_threshold = sys.argv[3],
+        stop_loss = sys.argv[4],
+        buy_size = sys.argv[5],
+        coin = sys.argv[6]
     )

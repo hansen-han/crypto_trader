@@ -5,6 +5,7 @@ import time
 import configparser
 import ccxt
 import sys
+import ast
 
 
 #set up logging
@@ -35,12 +36,11 @@ except:
 
 coinbase = ccxt.coinbasepro({})
 
-def price_scraper(seconds_to_sleep = 600, currency_pair = "BTC/USD"):
+def price_scraper(currency_pair = "BTC/USD"):
     '''
     Collects currency pair price data from coinbase and stores it in an sqlite database. 
     
     Parameters:
-        seconds_to_sleep: how often to collect price data (default = 5 minutes)
         currency_pair: what currency pair data to collect (default = "BTC/USD")
     Returns:
         None
@@ -51,6 +51,10 @@ def price_scraper(seconds_to_sleep = 600, currency_pair = "BTC/USD"):
     conn = sqlite3.connect("pricedata.db")
     c = conn.cursor()
     logging.debug("Established connection with local database")
+
+    config = configparser.ConfigParser()
+    config.read_file(open("coinbase_parameters.txt"))
+    seconds_to_sleep = ast.literal_eval(config.get('Scraper Section', 'scraper_frequency'))*60 
 
     #start loop
     script_status = "run"
@@ -99,5 +103,5 @@ def price_scraper(seconds_to_sleep = 600, currency_pair = "BTC/USD"):
 
 
 if __name__ == "__main__":
-    price_scraper(seconds_to_sleep=sys.argv[1], currency_pair=sys.argv[2]) 
+    price_scraper(currency_pair=sys.argv[1]) 
 

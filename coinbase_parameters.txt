@@ -1,8 +1,15 @@
 [Scraper Section]
 scraper_script = run
 scrape = run
+scraper_frequency = 5
+# scraper_frequency is in terms of minutes
 
 [Mean Reversion Trader Section]
+total_invested = 10000
+trader_script = run
+trade = run
+
+[SMA Crossover Trader Section]
 total_invested = 10000
 trader_script = run
 trade = run
