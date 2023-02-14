@@ -11,8 +11,10 @@ To get started with the trading system, you will need to set up an account on th
 
 ## Usage
 
+### **1. Edit and run ```encode_coinbase_api_keys.py``` to encode coinbase API keys for scraping and trading**  
 
-**1. Configure Settings in ```config.txt```**  
+
+### **2. Configure settings in ```config.txt```**  
 
 ```scraper_script```: Specifies the state of the scraper script. Set to "run" to enable the scraper script, and set to any other value to terminate the script.
 
@@ -26,15 +28,16 @@ To get started with the trading system, you will need to set up an account on th
 
 ```trade```: Specifies the state of trading. Set to "run" to enable trading, and set to any other value to pause trading. The trading script will continue running, but will not execute trades until it is set back to "run".
 
-**2. Start Scraper to Collect Price Data**  
+### **3. Start scraper to collect price data**  
+Must be started before running either trading bot to gather price data to calculate moving averages. 
+
 - ```coin``` (str): the coin to be collect data on. Defaults to "BTC".
 
-*Example:*
 ``` 
 python3 coinbase_scraper.py BTC
 ```
 
-**3a. Run Mean Reversion Trader**  
+### **4a. Run mean reversion trading bot**  
 Bot that automatically buys and sells cryptocurrencies based on the principle of mean reversion. This strategy assumes that prices will eventually revert back to their average and seeks to profit from this tendency. The bot monitors the market data, calculates the mean (average) price, and uses this information to make trades. If the price of a cryptocurrency is below its average, the bot buys the coin, and if the price is above the average, it sells the coin. The goal is to buy low and sell high and generate profits over time by exploiting the mean-reverting behavior of the market.
 
 - ```rolling_window``` (int): the length of the moving average window, in minutes
@@ -43,12 +46,11 @@ Bot that automatically buys and sells cryptocurrencies based on the principle of
 - ```stop_loss``` (float): the threshold for selling a coin to stop losses, a value between 0 and 1 (for example, a 10% stop loss is represented by 0.9)
 - ```buy_size ```(float): the amount of available capital to use per trade, a value between 0 and 1
 - ```coin``` (str, optional): the coin to be traded. Defaults to "BTC".
-*Example:*
 ``` 
 python3 mean_reversion_trader.py 6000 0.97 1.03 0.9 1 BTC
 ```
 
-**3b. Run Trend Following Trader**  
+### **4b. Run SMA Crossover trading bot**  
 Bot that executes trades based on the crossover of two moving averages of the price of a cryptocurrency. The two moving averages are typically referred to as the "short" and "long" moving averages. The bot monitors the market data and calculates the moving averages of the price. If the short moving average crosses above the long moving average, it signals a potential buy opportunity and the bot buys the coin. Conversely, if the short moving average crosses below the long moving average, it signals a potential sell opportunity and the bot sells the coin. The crossover of the two moving averages is a popular technical analysis indicator used by traders to identify potential buy and sell signals. By implementing this strategy, the bot aims to take advantage of the trend changes in the market and generate profits over time.
 
 - ```intervals```: Specifies how often the function should check for new data in seconds.
@@ -57,7 +59,6 @@ Bot that executes trades based on the crossover of two moving averages of the pr
 - ```buy_size```: Specifies the amount of available capital to use per trade, given as a fraction between 0 and 1.
 - ```coin```:  Specifies the coin to be traded. The default value is "BTC".
 
-*Example:*
 ``` 
 python3 sma_crossover_trader.py 600 480 2490 0.9 BTC
 ```
