@@ -28,6 +28,8 @@ def live_trader(
         coin = "BTC"
 ):
     '''
+    This function is used for cryptocurrency trading using moving average crossover strategy. It has the following parameters:
+
     Parameters:
         intervals: how often to check for new data (in seconds)
         rolling_window_1: how long the long moving average should be (in minutes)
@@ -416,7 +418,7 @@ if __name__ == "__main__":
     live_trader(
         intervals = sys.argv[1],
         rolling_window_1 = sys.argv[2],
-        rolling_window_1 = sys.argv[3],
+        rolling_window_2 = sys.argv[3],
         buy_size = sys.argv[4],
         coin = sys.argv[5]
     )

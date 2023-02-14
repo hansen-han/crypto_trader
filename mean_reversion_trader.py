@@ -29,13 +29,15 @@ def live_trader(
         coin = "BTC"
 ):
     '''
+    This function implements a basic trade strategy based on a moving average and thresholds for buying, selling and stop loss.
+
     Parameters:
-        rolling_window: how long the moving average should be (in minutes)
-        buy_threshold: at what point when the price goes below the moving average to buy (if the buy threshold is 3%, use 0.97)
-        sell_threshold: at what point to sell and take profit (if the take profit is 3%, then use 1.03)
-        stop_loss: at what point to sell and stop losses (if the stop loss is 10%, use 0.9)
-        buy_size: how much available capital to use per trade (between 0 and 1)
-        coin: the coin to be traded (default = "BTC")
+        rolling_window (int): the length of the moving average window, in minutes
+        buy_threshold (float): the threshold for buying a coin, a value between 0 and 1 (for example, a 3% threshold is represented by 0.97)
+        sell_threshold (float): the threshold for selling a coin to take profit, a value between 0 and 1 (for example, a 3% threshold is represented by 1.03)
+        stop_loss (float): the threshold for selling a coin to stop losses, a value between 0 and 1 (for example, a 10% stop loss is represented by 0.9)
+        buy_size (float): the amount of available capital to use per trade, a value between 0 and 1
+        coin (str, optional): the coin to be traded. Defaults to "BTC".
     '''
     logging.debug("Initializing live trading algorithm")
 

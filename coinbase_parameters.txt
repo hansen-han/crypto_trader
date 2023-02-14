@@ -1,15 +1,49 @@
 [Scraper Section]
+# This section contains settings for the scraper script.
+
+# scraper_script determines whether the scraper script should run. 
+# Possible values: "run", "stop"
+# If set to "stop", the script will terminate and will need to be restarted.
 scraper_script = run
+
+# scrape determines whether the script should scrape data and save it to the database.
+# Possible values: "run", "pause"
+# If set to "pause", the script will continue running but will not scrape data.
 scrape = run
+
+# scraper_frequency determines how often the script should scrape data, in minutes.
 scraper_frequency = 5
-# scraper_frequency is in terms of minutes
 
 [Mean Reversion Trader Section]
+# This section contains settings for the mean reversion trader script.
+
+# total_invested determines the amount of capital that the trader has available to trade.
+# This value should be updated if funds are added or withdrawn from the coinbase account.
 total_invested = 10000
+
+# trader_script determines whether the trader script should run. 
+# Possible values: "run", "stop"
+# If set to "stop", the script will terminate and will need to be restarted.
 trader_script = run
+
+# trade determines whether the trader should trade.
+# Possible values: "run", "pause"
+# If set to "pause", the trader will pause trading, but the script will not terminate.
 trade = run
 
 [SMA Crossover Trader Section]
+# This section contains settings for the SMA crossover trader script.
+
+# total_invested determines the amount of capital that the trader has available to trade.
+# This value should be updated if funds are added or withdrawn from the coinbase account.
 total_invested = 10000
+
+# trader_script determines whether the trader script should run. 
+# Possible values: "run", "stop"
+# If set to "stop", the script will terminate and will need to be restarted.
 trader_script = run
+
+# trade determines whether the trader should trade.
+# Possible values: "run", "pause"
+# If set to "pause", the trader will pause trading, but the script will not terminate.
 trade = run

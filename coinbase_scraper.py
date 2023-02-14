@@ -54,7 +54,7 @@ def price_scraper(currency_pair = "BTC/USD"):
 
     config = configparser.ConfigParser()
     config.read_file(open("coinbase_parameters.txt"))
-    seconds_to_sleep = ast.literal_eval(config.get('Scraper Section', 'scraper_frequency'))*60 
+    seconds_to_sleep = ast.literal_eval(config.get('Scraper Section', 'scraper_frequency'))*60 #convert the minutes into seconds
 
     #start loop
     script_status = "run"
