@@ -53,7 +53,7 @@ def price_scraper(currency_pair = "BTC/USD"):
     logging.debug("Established connection with local database")
 
     config = configparser.ConfigParser()
-    config.read_file(open("coinbase_parameters.txt"))
+    config.read_file(open("config.txt"))
     seconds_to_sleep = ast.literal_eval(config.get('Scraper Section', 'scraper_frequency'))*60 #convert the minutes into seconds
 
     #start loop
@@ -62,7 +62,7 @@ def price_scraper(currency_pair = "BTC/USD"):
 
         #Get Master Parameters
         config = configparser.ConfigParser()
-        config.read_file(open("coinbase_parameters.txt"))
+        config.read_file(open("config.txt"))
         scrape_status = config.get('Scraper Section', 'scrape') #controls whether to scrape this cycle
         script_status = config.get('Scraper Section', 'scraper_script') #controls whether to shut the script down
         download_status = ""
@@ -80,7 +80,7 @@ def price_scraper(currency_pair = "BTC/USD"):
     
             except Exception as e:
                 download_status = "failure"
-                logging.error("Failed to download ticker data:" + +  str(e))
+                logging.error("Failed to download ticker data:" + str(e))
 
             #add data to the database if succesfully downloaded
             if download_status == "success":

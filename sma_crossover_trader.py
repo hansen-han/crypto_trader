@@ -90,7 +90,7 @@ def live_trader(
 
         #Get Master Parameters
         config = configparser.ConfigParser()
-        config.read_file(open("coinbase_parameters.txt"))
+        config.read_file(open("config.txt"))
         starting_capital = config.get('SMA Crossover Trader Section', 'total_invested') #corrects relevant variables based on new funding
         trade_status = config.get('SMA Crossover Trader Section', 'trade') #controls whether to trade this cycle
         script_status = config.get('SMA Crossover Trader Section', 'trader_script') #controls whether to shut the script down
