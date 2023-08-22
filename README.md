@@ -65,7 +65,7 @@ python3 sma_crossover_trader.py 600 480 2490 0.9 BTC
 
 ## Related Analysis
 
-https://github.com/hansenrhan/crypto_backtesting_analysis
+https://github.com/hansenrhan/backtesting/bitcoin
 
 If you are interested in running these bots, you may want to check out this analysis I wrote to identify the optimal parameters for the bots. I used 1-minute Bitcoin data from 2014 to 2019 and applied both a simple moving average (SMA) crossover system and a mean reversion system to determine the performance of each strategy. The results of the analysis show that the highest cumulative return for each strategy was 3,929.8% for mean reversion and 5,569.8% for SMA crossover.
 
